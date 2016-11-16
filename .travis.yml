@@ -1,0 +1,18 @@
+language: julia
+
+os:
+  - linux
+  - osx
+
+julia:
+  - 0.5
+  - nightly
+
+before_install:
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+
+script:
+  - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("NLPClass"); Pkg.test("NLPClass", coverage=true)'
+
+after_success:
+  - julia -e 'cd(Pkg.dir("NLPClass")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
