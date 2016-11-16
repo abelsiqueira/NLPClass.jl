@@ -5,12 +5,14 @@ class = NLPClass.Class()
 
 @NLPClassify(class, rosen,
   begin
+    nvar = 2
     obj = gen
     con = unc
   end)
 
 @NLPClassify(class, simple,
   begin
+    nvar = 5
     obj = quadratic
     con = unc
   end)

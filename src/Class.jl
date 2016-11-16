@@ -20,7 +20,13 @@ macro NLPClassify(class, problem, block)
       # Skip
     elseif isexpr(arg, :(=))
       k = C.alias[arg.args[1]]
-      v = string(C.alias[arg.args[2]])
+      if isa(arg.args[2], Union{Symbol,String})
+        v = string(C.alias[arg.args[2]])
+      elseif isa(arg.args[2], Number)
+        v = arg.args[2]
+      else
+        error("Unhandled $v")
+      end
       push!(kwargs.args, Expr(:kw, k, v))
     else
       error("Argument not handled: $arg")

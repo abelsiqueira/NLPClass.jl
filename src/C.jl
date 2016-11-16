@@ -1,9 +1,10 @@
 module C
 
 const alias = Dict(
-    # General
+    # General purpose
     :gen => :general,
     :general => :general,
+    :none => :none,
     # Attributes
     :obj            => :objective_type,
     :objective      => :objective_type,
@@ -11,9 +12,12 @@ const alias = Dict(
     :con              => :constraints_type,
     :constraints      => :constraints_type,
     :constraints_type => :constraints_type,
+    :n                   => :number_of_variables,
+    :nvar                => :number_of_variables,
+    :nvariables          => :number_of_variables,
+    :number_of_variables => :number_of_variables,
     # Values
     ## Objective
-    :none => :none,
     :lin => :linear,
     :linear => :linear,
     :quad => :quadratic,
@@ -31,7 +35,7 @@ const alias = Dict(
     :inequality => :inequality
     )
 
-const valid_obj = ["none", "linear", "quadratic", "sum-of-squares", "general"]
+const valid_obj = ["none", "linear", "quadratic", "sum_of_squares", "general"]
 
 const valid_con = ["unconstrained", "bounds", "equality", "inequality", "general"]
 
