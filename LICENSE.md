@@ -1,7 +1,6 @@
 NLPClass - Nonlinear Problems Classifier
-Copyright © 2016, Abel Soares Siqueira
 
-#
+Copyright © 2016, Abel Soares Siqueira
 
 >                     GNU GENERAL PUBLIC LICENSE
 >                        Version 3, 29 June 2007
