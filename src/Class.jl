@@ -20,7 +20,7 @@ macro NLPClassify(class, problem, block)
       # Skip
     elseif isexpr(arg, :(=))
       k = C.alias[arg.args[1]]
-      v = string(arg.args[2])
+      v = string(C.alias[arg.args[2]])
       push!(kwargs.args, Expr(:kw, k, v))
     else
       error("Argument not handled: $arg")
@@ -42,7 +42,9 @@ function queryProblems(class :: Class; kwargs...)
   for (k,v) in kwargs
     kk = C.alias[k]
     if isa(v, Union{String,Symbol})
-      v = [v]
+      v = [string(C.alias[Symbol(v)])]
+    else
+      v = map(x->string(getfield(C.alias, Symbol(x))), v)
     end
     push!(pairs, (kk,v))
   end
