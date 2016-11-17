@@ -11,6 +11,7 @@ before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 
 script:
+  - julia -e 'Pkg.clone("https://github.com/JuliaSmoothOptimizers/CUTEst.jl")'
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("NLPClass"); Pkg.test("NLPClass", coverage=true)'
 
 after_success:
