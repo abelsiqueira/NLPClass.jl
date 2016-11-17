@@ -3,15 +3,26 @@ language: julia
 os:
   - linux
 
+addons:
+  apt_packages:
+    - gfortran
+    - libgsl0-dev
+
+sudo:
+  required
+
 julia:
   - 0.5
   - nightly
 
 before_install:
+  - if [ `uname` == "Linux" ]; then
+    unset DYLD_LIBRARY_PATH;
+    sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/$(gfortran -dumpversion | cut -f1,2 -d.)/libgfortran.so /usr/local/lib; fi
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 
 script:
-  - julia -e 'Pkg.clone("https://github.com/JuliaSmoothOptimizers/CUTEst.jl")'
+  - julia -e 'Pkg.clone("https://github.com/JuliaSmoothOptimizers/CUTEst.jl"); Pkg.checkout("CUTEst", "develop"); Pkg.build("CUTEst")'
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("NLPClass"); Pkg.test("NLPClass", coverage=true)'
 
 after_success:
