@@ -27,6 +27,14 @@ macro NLPClassify(class, problem, block)
         else
           v = string(C.alias[v])
         end
+      elseif isa(v, Expr)
+        k = C.alias[arg.args[1]]
+        if k == :open
+          push!(kwargs.args, Expr(:kw, :open_args, v.args[2:end]))
+          v = string(v.args[1])
+        else
+          error("Unhandled Expr $v: $k is not :open")
+        end
       elseif isa(v, Number)
         # Skip
       else
@@ -78,7 +86,9 @@ end
 import Base.open
 function open(class :: Class, problem :: String)
   f = Symbol(class.entries[problem].open)
-  return :(eval($f)())
+  e = Expr(:call, f)
+  append!(e.args, class.entries[problem].open_args)
+  return e
 end
 
 # Do I really want camelCase?

@@ -4,7 +4,8 @@ immutable Entry
   number_of_constraints :: Int
   objective_type :: String
   constraints_type :: String
-  open :: String
+  open :: Union{String,Expr}
+  open_args :: Array
   close :: String
   model_type :: String
 
@@ -13,11 +14,12 @@ immutable Entry
       number_of_constraints :: Int = 0,
       objective_type :: String = "general",
       constraints_type :: String = "none",
-      open :: String = "error",
+      open :: Union{String,Expr} = "error",
+      open_args :: Array = [],
       close :: String = "",
       model_type :: String = "Any",
      ) = new(name, number_of_variables, number_of_constraints, objective_type,
-             constraints_type, open, close, model_type)
+             constraints_type, open, open_args, close, model_type)
 end
 
 import Base.show

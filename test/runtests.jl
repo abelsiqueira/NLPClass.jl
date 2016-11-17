@@ -1,6 +1,7 @@
 using Base.Test
-using NLPClass
+using CUTEst
 using JuMP
+using NLPClass
 using NLPModels
 
 class = NLPClass.Class()
@@ -8,7 +9,7 @@ class = NLPClass.Class()
 @NLPClassify(class, Rosenbrock,
   begin
     nvar = 2
-    obj = gen
+    obj = sos
     con = unc
     open = rosen
     model_type = JuMPModel
@@ -52,12 +53,35 @@ function nlpexample()
                ucon=[0.0])
 end
 
+@NLPClassify(class, ROSENBR,
+  begin
+    nvar = 2
+    obj = sos
+    con = unc
+    open = CUTEstModel("ROSENBR")
+    model_type = AbstractNLPModel
+  end
+)
+# ROSENBR is defined at CUTEst
+
+@NLPClassify(class, HS7,
+  begin
+    nvar = 2
+    ncon = 1
+    obj = gen
+    con = equ
+    open = CUTEstModel("HS7")
+    model_type = AbstractNLPModel
+  end
+)
+# HS7 is defined at CUTEst
+
 listProblems(class)
 
-@assert queryProblems(class, obj="gen") == ["Rosenbrock"]
-@assert queryProblems(class, obj="gen", con="unc") == ["Rosenbrock"]
-@assert queryProblems(class, obj="gen", con="equ") == []
-@assert sort(queryProblems(class, con="unc")) == ["Rosenbrock", "simple"]
+@assert sort(queryProblems(class, obj="sos")) == ["ROSENBR", "Rosenbrock"]
+@assert sort(queryProblems(class, obj="sos", con="unc")) == ["ROSENBR", "Rosenbrock"]
+@assert queryProblems(class, obj="gen", con="equ") == ["HS7"]
+@assert sort(queryProblems(class, con="unc")) == ["ROSENBR", "Rosenbrock", "simple"]
 
 for problem in keys(class.entries)
   println("Opening problem $problem")
@@ -70,4 +94,5 @@ for problem in keys(class.entries)
   end
   println("  x0 = $(nlp.meta.x0)")
   println("  f(x0) = $(obj(nlp, nlp.meta.x0))")
+  finalize(nlp)
 end
