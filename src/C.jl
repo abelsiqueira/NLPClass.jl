@@ -18,6 +18,10 @@ const alias = Dict(
     :number_of_variables => :number_of_variables,
     :open => :open,
     :close => :close,
+    :ptype => :model_type,
+    :problem_type => :model_type,
+    :mtype => :model_type,
+    :model_type => :model_type,
     # Values
     ## Objective
     :lin => :linear,

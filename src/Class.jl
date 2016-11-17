@@ -1,4 +1,4 @@
-export @NLPClassify, listProblems, queryProblems, open
+export @NLPClassify, listProblems, queryProblems, open, getType
 
 """Class
 
@@ -22,7 +22,7 @@ macro NLPClassify(class, problem, block)
       k = C.alias[arg.args[1]]
       v = arg.args[2]
       if isa(v, Union{Symbol,String})
-        if k == :open || k == :close
+        if k in [:open, :close, :model_type]
           v = string(v)
         else
           v = string(C.alias[v])
@@ -79,4 +79,9 @@ import Base.open
 function open(class :: Class, problem :: String)
   f = Symbol(class.entries[problem].open)
   return :(eval($f)())
+end
+
+# Do I really want camelCase?
+function getType(class :: Class, problem :: String)
+  return class.entries[problem].model_type
 end
