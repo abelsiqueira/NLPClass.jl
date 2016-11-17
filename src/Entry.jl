@@ -1,14 +1,21 @@
 immutable Entry
   name :: String
   number_of_variables :: Int
+  number_of_constraints :: Int
   objective_type :: String
   constraints_type :: String
+  open :: String
+  close :: String
 
   Entry(name;
       number_of_variables :: Int = 0,
+      number_of_constraints :: Int = 0,
       objective_type :: String = "general",
       constraints_type :: String = "none",
-     ) = new(name, number_of_variables, objective_type, constraints_type)
+      open :: String = "error",
+      close :: String = "",
+     ) = new(name, number_of_variables, number_of_constraints, objective_type,
+             constraints_type, open, close)
 end
 
 import Base.show

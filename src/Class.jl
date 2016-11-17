@@ -1,4 +1,4 @@
-export @NLPClassify, listProblems, queryProblems
+export @NLPClassify, listProblems, queryProblems, open
 
 """Class
 
@@ -20,10 +20,15 @@ macro NLPClassify(class, problem, block)
       # Skip
     elseif isexpr(arg, :(=))
       k = C.alias[arg.args[1]]
-      if isa(arg.args[2], Union{Symbol,String})
-        v = string(C.alias[arg.args[2]])
-      elseif isa(arg.args[2], Number)
-        v = arg.args[2]
+      v = arg.args[2]
+      if isa(v, Union{Symbol,String})
+        if k == :open || k == :close
+          v = string(v)
+        else
+          v = string(C.alias[v])
+        end
+      elseif isa(v, Number)
+        # Skip
       else
         error("Unhandled $v")
       end
@@ -70,3 +75,8 @@ function queryProblems(class :: Class; kwargs...)
   return problems
 end
 
+import Base.open
+function open(class :: Class, problem :: String)
+  f = Symbol(class.entries[problem].open)
+  return :(eval($f)())
+end
