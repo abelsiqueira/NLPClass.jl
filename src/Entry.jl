@@ -29,6 +29,14 @@ function Entry(name;
     println("Warning: best_solution given, but best_fsol not given.")
     println("  Please submit best_fsol too")
   end
+  if best_solution != [] && length(best_solution) != number_of_variables
+    error("Size of best solution is different than number of variables")
+  end
+
+  for (arg,valid_args) in [(objective_type, C.valid_obj),
+                           (constraints_type, C.valid_con)]
+    arg in valid_args || error("$arg is not a valid value")
+  end
 
   return Entry(name, number_of_variables, number_of_constraints, objective_type,
              constraints_type, open, open_args, close, model_type,
