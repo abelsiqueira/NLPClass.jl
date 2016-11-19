@@ -8,8 +8,11 @@ immutable Entry
   open_args :: Array
   close :: String
   model_type :: String
+  best_solution :: Vector
+  best_fsol :: Real
+end
 
-  Entry(name;
+function Entry(name;
       number_of_variables :: Int = 0,
       number_of_constraints :: Int = 0,
       objective_type :: String = "general",
@@ -18,8 +21,18 @@ immutable Entry
       open_args :: Array = [],
       close :: String = "",
       model_type :: String = "Any",
-     ) = new(name, number_of_variables, number_of_constraints, objective_type,
-             constraints_type, open, open_args, close, model_type)
+      best_solution :: Vector = [],
+      best_fsol :: Real = Inf,
+     )
+
+  if best_fsol == Inf && best_solution != []
+    println("Warning: best_solution given, but best_fsol not given.")
+    println("  Please submit best_fsol too")
+  end
+
+  return Entry(name, number_of_variables, number_of_constraints, objective_type,
+             constraints_type, open, open_args, close, model_type,
+             best_solution, best_fsol)
 end
 
 import Base.show
@@ -34,4 +47,7 @@ function show(io :: IO, entry :: Entry)
   end
   println("  Objective function type: $(entry.objective_type)")
   println("  Constraints type: $(entry.constraints_type)")
+  if entry.best_fsol < Inf
+    println("  Best known objective value: $(entry.best_fsol)")
+  end
 end

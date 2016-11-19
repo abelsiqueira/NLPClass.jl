@@ -13,6 +13,8 @@ class = NLPClass.Class()
     con = unc
     open = rosen
     model_type = JuMPModel
+    sol = [1.0; 1.0]
+    fsol = 1.0
   end)
 function rosen()
   nlp = Model()
@@ -30,6 +32,7 @@ end
     con = unc
     open = simple
     model_type = JuMPModel
+    sol = collect(1.0:5)
   end)
 function simple()
   nlp = Model()
@@ -94,5 +97,16 @@ for problem in keys(class.entries)
   end
   println("  x0 = $(nlp.meta.x0)")
   println("  f(x0) = $(obj(nlp, nlp.meta.x0))")
+  sol = get(class, problem, :sol)
+  if sol != []
+    println("  sol = $sol")
+  end
+  fbest = get(class, problem, :fbest)
+  if fbest == Inf && sol != []
+    fbest = obj(nlp, sol)
+  end
+  if fbest < Inf
+    println("  fbest = $fbest")
+  end
   finalize(nlp)
 end

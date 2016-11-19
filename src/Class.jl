@@ -32,6 +32,8 @@ macro NLPClassify(class, problem, block)
         if k == :open
           push!(kwargs.args, Expr(:kw, :open_args, v.args[2:end]))
           v = string(v.args[1])
+        elseif k == :best_solution
+          v = eval(v)
         else
           error("Unhandled Expr $v: $k is not :open")
         end
@@ -91,7 +93,13 @@ function open(class :: Class, problem :: String)
   return e
 end
 
+import Base.get
+function get(class :: Class, problem :: String, cat :: Union{String,Symbol})
+  cat = isa(cat, String) ? C.alias[Symbol(cat)] : C.alias[cat]
+  return getfield(class.entries[problem], cat)
+end
+
 # Do I really want camelCase?
 function getType(class :: Class, problem :: String)
-  return class.entries[problem].model_type
+  return get(class, problem, :model_type)
 end

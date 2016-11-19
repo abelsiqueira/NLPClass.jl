@@ -26,6 +26,12 @@ const alias = Dict(
     :problem_type => :model_type,
     :mtype => :model_type,
     :model_type => :model_type,
+    :sol => :best_solution,
+    :solution => :best_solution,
+    :best_solution => :best_solution,
+    :fsol => :best_fsol,
+    :fbest => :best_fsol,
+    :best_fsol => :best_fsol,
     # Values
     ## Objective
     :lin => :linear,
